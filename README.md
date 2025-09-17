@@ -28,6 +28,47 @@ This project provides a simple Spring Boot API that allows you to upload policy 
 
 The API will start on `http://localhost:8080`.
 
+## Running with Docker
+
+You can build and run the service without installing Java or Maven by using the included Dockerfile.
+
+1. Build the container image:
+   ```bash
+   docker build -t policy-assistant .
+   ```
+2. Create host directories to persist uploaded PDFs and the H2 database:
+   ```bash
+   mkdir -p storage/pdfs data
+   ```
+3. Run the container, providing your AWS credentials and mounting the persistence directories:
+   ```bash
+   docker run \
+     --rm \
+     -p 8080:8080 \
+     -e AWS_ACCESS_KEY_ID=YOUR_KEY \
+     -e AWS_SECRET_ACCESS_KEY=YOUR_SECRET \
+     -e AWS_SESSION_TOKEN=YOUR_SESSION_TOKEN \
+     -v "$(pwd)/storage:/app/storage" \
+     -v "$(pwd)/data:/app/data" \
+     policy-assistant
+   ```
+
+   Omit `AWS_SESSION_TOKEN` if it is not required for your credentials. The service will be available on `http://localhost:8080` as before.
+
+To override application properties (for example, the Bedrock region), pass standard Spring Boot environment variables or JVM options, e.g.:
+
+```bash
+docker run \
+  --rm \
+  -p 8080:8080 \
+  -e AWS_ACCESS_KEY_ID=YOUR_KEY \
+  -e AWS_SECRET_ACCESS_KEY=YOUR_SECRET \
+  -e SPRING_APPLICATION_JSON='{"bedrock":{"region":"us-west-2"}}' \
+  -v "$(pwd)/storage:/app/storage" \
+  -v "$(pwd)/data:/app/data" \
+  policy-assistant
+```
+
 ## Endpoints overview
 
 | Method | Endpoint | Description |

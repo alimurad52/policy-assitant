@@ -1,0 +1,9 @@
+target/
+*.iml
+.idea/
+*.log
+*.tmp
+.DS_Store
+storage/pdfs/*
+!storage/pdfs/.gitkeep
+data/

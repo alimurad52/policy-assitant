@@ -1,0 +1,6 @@
+target/
+.git/
+.gitignore
+storage/
+data/
+test.txt
